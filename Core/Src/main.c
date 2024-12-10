@@ -154,32 +154,104 @@ int main(void)
 	uint8_t start = 1;
 	uint32_t counter = 0;
 	char buffer[50];
-
+	uint8_t button_state = 1; // 0 means button pressed
+	uint8_t walk = 1;			// 0 means walk
 	while (1) {
 	/* USER CODE END WHILE */
 
+	button_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_2); // Read button state
+	if (button_state == 0) {
+		walk = 0;
+	}
 
-	  if (start) {
-		  strcpy(buffer, "initializing legs\r\n");
-		  HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), HAL_MAX_DELAY);
+	if (start) {
+		strcpy(buffer, "initializing legs\r\n");
+		HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), HAL_MAX_DELAY);
 
-		  init_legs();
-		  start = 0;
-	  }
-	  rest_legs();
+		init_legs();
+		start = 0;
+	}
 
-	  // hip, knee
-	  move_leg(&htim3, TIM_CHANNEL_1, TIM_CHANNEL_2); // leg 2
-	  move_leg(&htim2, TIM_CHANNEL_4, TIM_CHANNEL_3); // leg 4
-	  move_leg(&htim3, TIM_CHANNEL_4, TIM_CHANNEL_3); // leg 1
-	  move_leg(&htim2, TIM_CHANNEL_2, TIM_CHANNEL_1); // leg 3
-	  init_legs();
+	button_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_2); // Read button state
+		if (button_state == 0) {
+			walk = 0;
+	}
 
-	  sprintf(buffer, "Counter Value: %lu\r\n", counter);
-	  HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), HAL_MAX_DELAY);
 
-	  counter++;
-	  HAL_Delay(1000);
+		//		sprintf(buffer, "Button Value: %d\r\n", button_state);
+				sprintf(buffer, "Button Value: %d\r\n", walk);
+	HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), 1000);
+
+	if (walk == 0) {
+//		sprintf(buffer, "Button Value: %d\r\n", button_state);
+		sprintf(buffer, "Button Value: %d\r\n", walk);
+		HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), 1000);
+		rest_legs();
+		//		sprintf(buffer, "Button Value: %d\r\n", button_state);
+				sprintf(buffer, "Button Value: %d\r\n", walk);
+		HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), 1000);
+
+		button_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_2); // Read button state
+		if (button_state == 0) {
+			walk = 1;
+//			break;
+		}
+
+		// hip, knee
+		if (walk == 0) {
+		move_leg(&htim2, TIM_CHANNEL_4, TIM_CHANNEL_3); // leg 4
+		}
+		button_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_2); // Read button state
+			if (button_state == 0) {
+			walk = 1;
+//			break;
+		}
+			//		sprintf(buffer, "Button Value: %d\r\n", button_state);
+					sprintf(buffer, "Button Value: %d\r\n", walk);
+		HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), 1000);
+		if (walk == 0) {
+		move_leg(&htim3, TIM_CHANNEL_1, TIM_CHANNEL_2); // leg 2
+		}
+		button_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_2); // Read button state
+			if (button_state == 0) {
+			walk = 1;
+//			break;
+		}
+			//		sprintf(buffer, "Button Value: %d\r\n", button_state);
+					sprintf(buffer, "Button Value: %d\r\n", walk);
+		HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), 1000);
+		if (walk == 0) {
+		move_leg(&htim3, TIM_CHANNEL_4, TIM_CHANNEL_3); // leg 1
+		}
+		button_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_2); // Read button state
+			if (button_state == 0) {
+			walk = 1;
+//			break;
+		}
+			//		sprintf(buffer, "Button Value: %d\r\n", button_state);
+					sprintf(buffer, "Button Value: %d\r\n", walk);
+		HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), 1000);
+		if (walk == 0) {
+		move_leg(&htim2, TIM_CHANNEL_2, TIM_CHANNEL_1); // leg 3
+		}
+		button_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_2); // Read button state
+			if (button_state == 0) {
+			walk = 1;
+//			break;
+		}
+			//		sprintf(buffer, "Button Value: %d\r\n", button_state);
+					sprintf(buffer, "Button Value: %d\r\n", walk);
+		HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), 1000);
+		init_legs();
+
+	}
+
+	//		sprintf(buffer, "Button Value: %d\r\n", button_state);
+			sprintf(buffer, "Button Value: %d\r\n", walk);
+	HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), 1000);
+
+	counter++;
+	HAL_Delay(1000);
 
 	}
 
@@ -214,29 +286,29 @@ void init_legs() {
 }
 
 void rest_legs() {
-	// leg2
-	hip = ((Rest[0]) / 0.09 + 250);
-	knee = ((Rest[1]) / 0.09 + 250);
-	__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_4, hip);
-	__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, knee);
-	HAL_Delay(1000);
 	// leg4
 	hip = ((Rest[0]) / 0.09 + 250);
 	knee = ((Rest[1]) / 0.09 + 250);
 	__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, hip);
 	__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, knee);
 	HAL_Delay(2000);
-  // leg1
+	// leg2
 	hip = ((Rest[0]) / 0.09 + 250);
 	knee = ((Rest[1]) / 0.09 + 250);
-	__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, hip);
-	__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, knee);
+	__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_4, hip);
+	__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, knee);
 	HAL_Delay(1000);
 	// leg3
 	hip = ((Rest[0]) / 0.09 + 250);
 	knee = ((Rest[1]) / 0.09 + 250);
 	__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_4, hip);
 	__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, knee);
+	HAL_Delay(1000);
+  // leg1
+	hip = ((Rest[0]) / 0.09 + 250);
+	knee = ((Rest[1]) / 0.09 + 250);
+	__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, hip);
+	__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, knee);
 	HAL_Delay(1000);
 }
 
@@ -551,12 +623,19 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : PC1 PC2 */
-  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_2;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  // Configure GPIOC2 as input
+  GPIO_InitStruct.Pin = GPIO_PIN_2;        // Only PC2
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT; // Set as input
+  GPIO_InitStruct.Pull = GPIO_NOPULL;     // No internal pull (since external pull-up exists)
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  // Configure GPIOC1 as output (original configuration)
+  GPIO_InitStruct.Pin = GPIO_PIN_1;        // Only PC1
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP; // Push-pull output
+  GPIO_InitStruct.Pull = GPIO_NOPULL;         // No internal pull
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
 
   /*Configure GPIO pin : PB10 */
   GPIO_InitStruct.Pin = GPIO_PIN_10;
