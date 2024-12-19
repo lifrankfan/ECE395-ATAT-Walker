@@ -176,27 +176,20 @@ int main(void)
 		if (button_state == 0) {
 			walk = 0;
 	}
-
-
-		//		sprintf(buffer, "Button Value: %d\r\n", button_state);
-				sprintf(buffer, "Button Value: %d\r\n", walk);
+	sprintf(buffer, "Button Value: %d\r\n", walk);
 	HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), 1000);
 
 	if (walk == 0) {
-//		sprintf(buffer, "Button Value: %d\r\n", button_state);
 		sprintf(buffer, "Button Value: %d\r\n", walk);
 		HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), 1000);
 		rest_legs();
-		//		sprintf(buffer, "Button Value: %d\r\n", button_state);
 				sprintf(buffer, "Button Value: %d\r\n", walk);
 		HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), 1000);
 
 		button_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_2); // Read button state
 		if (button_state == 0) {
 			walk = 1;
-//			break;
 		}
-
 		// hip, knee
 		if (walk == 0) {
 		move_leg(&htim2, TIM_CHANNEL_4, TIM_CHANNEL_3); // leg 4
@@ -204,10 +197,8 @@ int main(void)
 		button_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_2); // Read button state
 			if (button_state == 0) {
 			walk = 1;
-//			break;
 		}
-			//		sprintf(buffer, "Button Value: %d\r\n", button_state);
-					sprintf(buffer, "Button Value: %d\r\n", walk);
+		sprintf(buffer, "Button Value: %d\r\n", walk);
 		HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), 1000);
 		if (walk == 0) {
 		move_leg(&htim3, TIM_CHANNEL_1, TIM_CHANNEL_2); // leg 2
@@ -215,10 +206,8 @@ int main(void)
 		button_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_2); // Read button state
 			if (button_state == 0) {
 			walk = 1;
-//			break;
 		}
-			//		sprintf(buffer, "Button Value: %d\r\n", button_state);
-					sprintf(buffer, "Button Value: %d\r\n", walk);
+		sprintf(buffer, "Button Value: %d\r\n", walk);
 		HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), 1000);
 		if (walk == 0) {
 		move_leg(&htim3, TIM_CHANNEL_4, TIM_CHANNEL_3); // leg 1
@@ -226,10 +215,8 @@ int main(void)
 		button_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_2); // Read button state
 			if (button_state == 0) {
 			walk = 1;
-//			break;
 		}
-			//		sprintf(buffer, "Button Value: %d\r\n", button_state);
-					sprintf(buffer, "Button Value: %d\r\n", walk);
+		sprintf(buffer, "Button Value: %d\r\n", walk);
 		HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), 1000);
 		if (walk == 0) {
 		move_leg(&htim2, TIM_CHANNEL_2, TIM_CHANNEL_1); // leg 3
@@ -237,25 +224,18 @@ int main(void)
 		button_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_2); // Read button state
 			if (button_state == 0) {
 			walk = 1;
-//			break;
 		}
-			//		sprintf(buffer, "Button Value: %d\r\n", button_state);
-					sprintf(buffer, "Button Value: %d\r\n", walk);
+		sprintf(buffer, "Button Value: %d\r\n", walk);
 		HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), 1000);
 		init_legs();
 
 	}
-
-	//		sprintf(buffer, "Button Value: %d\r\n", button_state);
-			sprintf(buffer, "Button Value: %d\r\n", walk);
+	sprintf(buffer, "Button Value: %d\r\n", walk);
 	HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), 1000);
 
 	counter++;
 	HAL_Delay(1000);
-
 	}
-
-
     /* USER CODE BEGIN 3 */
 }
 void init_legs() {
